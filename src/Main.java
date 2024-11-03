@@ -1,18 +1,168 @@
 import java.util.HashMap;
+import java.util.Stack;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        testStack();
+    }
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+    public static void testStack(){
+        Stack<String> stack = new Stack<>();
+        stack.push("1");
+        stack.push("2");
+        System.out.println(stack.pop());
+        System.out.println(stack.pop());
+    }
+
+    public static String BitmapHoles(String[] strArr) {
+        int[][] matrix = new int[strArr.length][strArr[0].length()];
+        int[][] visitted = new int[strArr.length][strArr[0].length()];
+        int countHoles = 0;
+        int index = 0;
+
+        // code goes here
+        for (String s: strArr){
+            for (int j=0; j < s.length(); j++){
+                matrix[index][j] = Integer.parseInt("" + s.charAt(j));
+            }
+
+            index++;
         }
+
+        for (int i=0; i < matrix.length; i++){
+            for (int j=0; j < matrix[0].length; j++){
+                if (matrix[i][j] == 0 && visitted[i][j] != 1){
+                    countHoles++;
+                    markAroundVisited(i, j, matrix);
+                }
+            }
+        }
+
+        return ""+countHoles;
+    }
+
+    public static void markAroundVisited(int i, int j, int[][] matrix ){
+        matrix[i][j] = 1;
+
+        // up
+        if ( (i > 0) && (matrix[i-1][j] == 0) ){
+            matrix[i-1][j] = 1;
+            markAroundVisited(i-1, j, matrix);
+        }
+
+        //down
+        if ( i < matrix.length - 1 && matrix[i + 1][j] == 0 ){
+            matrix[i + 1][j] = 1;
+            markAroundVisited(i+1, j, matrix);
+        }
+
+        //right
+        if ( j < matrix[0].length - 1 && matrix[i][j+1] == 0 ){
+            matrix[i][j+1] = 1;
+            markAroundVisited(i, j+1, matrix);
+        }
+
+        //left
+        if ( j > 0 && matrix[i][j-1] == 0  ){
+            matrix[i][j-1] = 1;
+            markAroundVisited(i, j-1, matrix);
+        }
+
+    }
+
+    static void bubbleSort(int arr[], int n){
+        int i, j, temp;
+        boolean swapped;
+        for (i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+
+                    // Swap arr[j] and arr[j+1]
+                    temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+
+            // If no two elements were
+            // swapped by inner loop, then break
+            if (swapped == false)
+                break;
+        }
+    }
+
+    public static int Consecutive(int[] arr) {
+        bubbleSort(arr, arr.length);
+        int sum = 0;
+
+        for (int i=0; i < arr.length-1; i++){
+            if ( arr[i] + 1 != arr[i + 1] ){
+                sum += arr[i+1] - arr[i] - 1;
+            }
+        }
+
+
+        // code goes here
+        return sum;
+    }
+
+    public static String StringReduction(String str) {
+        if (str.length() == 0){
+            return "0";
+        }
+
+        if (str.length() == 1){
+            return "1";
+        }
+
+        HashMap<String, Character> dictionary = new HashMap<>();
+        dictionary.put("ab", 'c');
+        dictionary.put("ba", 'c');
+        dictionary.put("bc", 'a');
+        dictionary.put("cb", 'a');
+        dictionary.put("ac", 'b');
+        dictionary.put("ca", 'b');
+        int reductions = Integer.MAX_VALUE;
+        char[] characters = new char[str.length()];
+
+        for (int i=0; i < characters.length; i++ ){
+            characters[i] = str.charAt(i);
+        }
+
+        while (reductions > 0 ) {
+            reductions = 0;
+            String strCharacters = new String(characters);
+
+            for (int i=0; i < strCharacters.length() - 1; i++){
+                StringBuilder sb = new StringBuilder();
+                sb.append(strCharacters.charAt(i));
+                sb.append(strCharacters.charAt(i+1));
+
+                if (dictionary.containsKey(sb.toString())){
+                    System.out.println(sb.toString());
+                    characters[i] = dictionary.get(sb.toString());
+                    characters[i+1] = '@';
+                    reductions++;
+                    strCharacters = new String(characters);
+                    strCharacters = strCharacters.replace("@", "");
+                    characters = strCharacters.toCharArray();
+                    break;
+                }
+            }
+
+
+            //System.out.println(strCharacters);
+        }
+
+        int l = new String(characters).length();
+
+
+        // code goes here
+        return (""+l).trim();
     }
 
     public static String MinWindowSubstring(String[] strArr) {
