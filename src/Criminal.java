@@ -74,10 +74,59 @@ public class Criminal {
         return false;
     }
 
-    public static void main(String[] args){
-        final Criminal criminal = new Criminal();
-        criminal.find("black bird");
-        criminal.find("Marylin Manson");
+    public static String largestPalindromic(String num) {
+        final StringBuilder firstHalf = new StringBuilder();
+        final StringBuilder secondHalf = new StringBuilder();
+        int[] frequency = new int[10];
+        StringBuilder center = new StringBuilder();
 
+        for (int i=0; i < num.length(); i++){
+            int val = num.charAt(i) - '0';
+            frequency[val]++;
+        }
+
+        for (int i=0; i < frequency.length; i++){
+            if (frequency[i] == 0){
+                continue;
+            }
+
+            if (frequency[i]%2 != 0){
+                if (center.isEmpty()) {
+                    while (frequency[i] > 0) {
+                        center.append(i);
+                        frequency[i]--;
+                    }
+                }else {
+                    while (frequency[i] > 1) {
+                        if (frequency[i] % 2 == 0){
+                            firstHalf.append(i);
+                        }else {
+                            secondHalf.append(i);
+                        }
+                        frequency[i]--;
+                    }
+                }
+
+                continue;
+            }
+
+            while( frequency[i] > 0 ) {
+                firstHalf.append(i);
+                frequency[i]--;
+
+                if (frequency[i] == 0) {
+                    continue;
+                }
+
+                secondHalf.append(i);
+                frequency[i]--;
+            }
+        }
+
+        return firstHalf.toString() + center + secondHalf.reverse();
+    }
+
+    public static void main(String[] args){
+       System.out.println(largestPalindromic("444947137"));
     }
 }
