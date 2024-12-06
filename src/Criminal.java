@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -85,7 +86,7 @@ public class Criminal {
             frequency[val]++;
         }
 
-        for (int i=0; i < frequency.length; i++){
+        for (int i=frequency.length-1; i >= 0; i--){
             if (frequency[i] == 0){
                 continue;
             }
@@ -126,7 +127,72 @@ public class Criminal {
         return firstHalf.toString() + center + secondHalf.reverse();
     }
 
+    public static int minMoves(int[] nums) {
+        int smallest = Integer.MAX_VALUE;
+        int indexSmallest = -1;
+        int indexLargest = -1;
+        int largest = Integer.MIN_VALUE;
+
+        for (int i=0; i < nums.length; i++){
+            if (nums[i] > largest){
+                indexLargest = i;
+            }
+
+            if (nums[i] < smallest){
+                indexSmallest = i;
+            }
+            largest = max(largest, nums[i]);
+            smallest = min(smallest, nums[i]);
+
+        }
+
+        int resultMax = nums.length - max(indexSmallest, indexLargest);
+
+        if (indexSmallest > indexLargest){
+            resultMax += indexLargest - indexSmallest;
+        }else {
+            resultMax += indexSmallest - indexLargest;
+        }
+
+        int resultMin =  min(indexLargest, indexSmallest) + 1;
+
+        if (indexLargest > indexSmallest){
+            resultMin += indexLargest - indexSmallest;
+        }else {
+            resultMin += indexSmallest - indexLargest;
+        }
+
+        return min(resultMax, resultMin);
+    }
+
+    public static int min(int a, int b) {
+        if (a < b) {
+            return a;
+        }
+
+        return b;
+    }
+
+
+    public static int max(int a, int b) {
+        if (a > b) {
+            return a;
+        }
+
+        return b;
+    }
+
+    public static String sortReverse(String word){
+        StringBuilder sb = new StringBuilder();
+
+        for (byte b : word.getBytes()){
+            sb.insert(0,  (char)b);
+        }
+
+        return sb.toString();
+    }
+
     public static void main(String[] args){
-       System.out.println(largestPalindromic("444947137"));
+       System.out.println(sortReverse("apple"));
     }
 }
