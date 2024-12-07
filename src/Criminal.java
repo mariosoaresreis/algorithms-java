@@ -1,7 +1,4 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Criminal {
     final Map<String, String> criminals = new HashMap<>();
@@ -182,8 +179,25 @@ public class Criminal {
         return b;
     }
 
+    public List<Integer> findKLargestNumbers(int[] nums, int k) {
+        PriorityQueue<Integer> p = new PriorityQueue<>((a,b) -> b - a);
+
+        for (int i=0; i < nums.length; i++){
+            p.add(nums[i]);
+        }
+
+        List<Integer> list = new ArrayList<>();
+
+        for (int i=1; i<= k; i++){
+            list.add(p.poll());
+        }
+
+        return list;
+    }
+
     public static String sortReverse(String word){
         StringBuilder sb = new StringBuilder();
+
 
         for (byte b : word.getBytes()){
             sb.insert(0,  (char)b);
@@ -193,6 +207,7 @@ public class Criminal {
     }
 
     public static void main(String[] args){
+        PriorityQueue<Integer> p = new PriorityQueue<>((a,b)-> b-a);
        System.out.println(sortReverse("apple"));
     }
 }
