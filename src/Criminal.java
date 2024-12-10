@@ -179,6 +179,77 @@ public class Criminal {
         return b;
     }
 
+    public int findKthSmallestNumber(int[] nums, int k) {
+        final PriorityQueue<Integer> p = new PriorityQueue<>((a,b) -> b-a);
+
+        for ( int i= 0; i < k; i++){
+            p.add(nums[i]);
+        }
+
+        for (int i=k; i < nums.length; i++){
+            if ( nums[i] < p.peek() ){
+                p.poll();
+                p.add(nums[i]);
+            }
+        }
+        return p.peek();
+    }
+
+    public static String sortCharacterByFrequency(String str) {
+        final Map<Character, Integer> map = new HashMap<>();
+        final PriorityQueue<Map.Entry<Character, Integer>> maxHeap =
+                new PriorityQueue<>((a,b)-> a.getValue()-b.getValue());
+
+
+        for (int i=0; i < str.length(); i++){
+            map.put(str.charAt(i), map.getOrDefault(str.charAt(i), 0) + 1);
+        }
+
+        maxHeap.addAll(map.entrySet());
+
+        final StringBuilder sb = new StringBuilder();
+
+        while(!maxHeap.isEmpty()){
+            Map.Entry<Character, Integer> entry = maxHeap.poll();
+
+            for (int i=1; i <= entry.getValue(); i++ ){
+                sb.append(entry.getKey());
+            }
+
+        }
+
+
+        return sb.toString();
+    }
+
+    public static List<Point> findClosestPoints(Point[] points, int k) {
+        final PriorityQueue<Point> minHeap = new PriorityQueue<>();
+        final Map<Integer, Integer> map = new HashMap<>();
+        StringBuilder sb = new StringBuilder();
+
+
+
+        for (int i=0; i < k; i++){
+            minHeap.add(points[i]);
+        }
+
+
+        for (int i=k; i < points.length; i++){
+            if ( points[i].distFromOrigin() < minHeap.peek().distFromOrigin()    ){
+                minHeap.poll();
+                minHeap.add(points[i]);
+            }
+        }
+
+        final List<Point> list = new ArrayList<>();
+
+        for (int i=1; i<=k; i++){
+            list.add(minHeap.poll());
+        }
+
+        return list;
+    }
+
     public List<Integer> findKLargestNumbers(int[] nums, int k) {
         PriorityQueue<Integer> p = new PriorityQueue<>((a,b) -> b - a);
 
@@ -198,7 +269,6 @@ public class Criminal {
     public static String sortReverse(String word){
         StringBuilder sb = new StringBuilder();
 
-
         for (byte b : word.getBytes()){
             sb.insert(0,  (char)b);
         }
@@ -207,7 +277,14 @@ public class Criminal {
     }
 
     public static void main(String[] args){
-        PriorityQueue<Integer> p = new PriorityQueue<>((a,b)-> b-a);
-       System.out.println(sortReverse("apple"));
+        // [[1,3],[3,4],[2,-1]]
+       Point p1 = new Point(1,3);
+       Point p2 = new Point(3,4);
+       Point p3 = new Point(2,-1);
+       Point[] points = new Point[]{p1, p2, p3};
+
+
+
+       System.out.println(sortCharacterByFrequency("aabbbc"));
     }
 }
