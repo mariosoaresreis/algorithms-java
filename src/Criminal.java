@@ -1,4 +1,5 @@
 import java.util.*;
+import java.math.*;
 
 public class Criminal {
     final Map<String, String> criminals = new HashMap<>();
@@ -9,6 +10,7 @@ public class Criminal {
         criminals.put("Marylin Maroon", "Joe Carlos, Black Bird, John Space");
         criminals.put("Adam Driver", "adam joe, Marylin Manson, mjay");
         criminals.put("Marylin Manson", "Dead, crow, joe");
+
     }
 
     private static boolean matchesExact(String word1, String word2){
@@ -276,15 +278,30 @@ public class Criminal {
         return sb.toString();
     }
 
+    public static List<Integer> findClosestElements(int[] arr, int K, int X) {
+        final PriorityQueue<Entry> minHeap =
+                new PriorityQueue<>( (a,b) -> b.value - a.value == 0? b.key - a.key: b.value - a.value );
+
+        for (int i = 0; i < arr.length; i++){
+            minHeap.add(new Entry(arr[i], Math.abs(X - arr[i])));
+
+            if (minHeap.size() > K){
+                minHeap.poll();
+            }
+        }
+
+        final List<Integer> result = new ArrayList<>();
+
+        while(!minHeap.isEmpty()){
+            result.add(minHeap.poll().key);
+        }
+
+        Collections.sort(result);
+
+        return result;
+    }
+
     public static void main(String[] args){
-        // [[1,3],[3,4],[2,-1]]
-       Point p1 = new Point(1,3);
-       Point p2 = new Point(3,4);
-       Point p3 = new Point(2,-1);
-       Point[] points = new Point[]{p1, p2, p3};
-
-
-
-       System.out.println(sortCharacterByFrequency("aabbbc"));
+       System.out.println(findClosestElements(new int[]{1,1,1,1,1}, 3, 1));
     }
 }
