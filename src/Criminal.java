@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.math.*;
 
@@ -302,6 +304,53 @@ public class Criminal {
     }
 
     public static void main(String[] args){
-       System.out.println(findClosestElements(new int[]{1,1,1,1,1}, 3, 1));
+        String month = "2012-12-02";
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate.parse(month, formatter2);
+
+    }
+
+    public static boolean exist(char[][] board, String word) {
+        for (int i=0; i < board.length; i++){
+            for (int j=0; j < board[0].length; j++){
+                boolean result = dfs(0, i, j, board, word);
+
+                if (result) {
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    }
+
+    static boolean dfs(int k, int i, int j, char[][] board, String word){
+        if (
+                (i > board.length - 1) ||
+                        (i < 0) ||
+                        (j > board[0].length -1) ||
+                        (j < 0) ||
+                        (word.charAt(k) != board[i][j])||
+                        (board[i][j] == '/') ){
+            return false;
+        }
+
+        if ( k >= word.length()-1){
+            return true;
+        }
+
+        char tmp = board[i][j];
+        board[i][j] = '/';
+
+        boolean result = dfs(k+1, i+1, j, board, word) ||
+                dfs(k+1, i, j+1, board, word) ||
+                dfs(k+1, i-1, j, board, word) ||
+                dfs(k+1, i, j-1, board, word);
+
+        board[i][j] = tmp;
+
+        return result;
+
     }
 }
