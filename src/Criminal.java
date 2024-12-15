@@ -304,9 +304,7 @@ public class Criminal {
     }
 
     public static void main(String[] args){
-        String month = "2012-12-02";
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate.parse(month, formatter2);
+        System.out.println(findMaximumDistinctElements(new int[]{3, 5, 12, 11, 12}, 2));
 
     }
 
@@ -323,6 +321,59 @@ public class Criminal {
         }
 
         return false;
+    }
+
+    public static int findMaximumDistinctElements(int[] nums, int k) {
+        int distinctElementsCount = 0;
+        final PriorityQueue<Map.Entry<Integer, Integer>> maxHeap =
+                new PriorityQueue<>((a,b) -> a.getValue()-b.getValue());
+
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int i=0; i < nums.length; i++){
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+        }
+
+        for ( Map.Entry<Integer, Integer> entry: map.entrySet()  ){
+            if (entry.getValue() == 1){
+                //distinctElementsCount++;
+            }else {
+                maxHeap.add(entry);
+            }
+        }
+
+        while (k > 0 && maxHeap.size() > 0 ){
+            int count = maxHeap.peek().getValue();
+            boolean found = false;
+
+            while (k > 0 && count > 1){
+                found = true;
+                count--;
+                k--;
+            }
+
+            if (!found){
+                count = 0;
+                k--;
+            }
+            Map.Entry<Integer, Integer> entry = maxHeap.poll();
+            map.put(entry.getKey(), count);
+        }
+
+        while (k > 0){
+            Map.Entry<Integer, Integer> entry = maxHeap.poll();
+            map.put(entry.getKey(), 0);
+            k--;
+        }
+
+        for ( Map.Entry<Integer, Integer> entry: map.entrySet()  ){
+            if (entry.getValue() == 1){
+                distinctElementsCount++;
+            }
+        }
+
+
+        return distinctElementsCount;
     }
 
     static boolean dfs(int k, int i, int j, char[][] board, String word){
@@ -342,6 +393,10 @@ public class Criminal {
 
         char tmp = board[i][j];
         board[i][j] = '/';
+        Map.Entry<Integer, Integer> p;
+        PriorityQueue<Map.Entry<Integer, Integer>> maxHeap = new PriorityQueue<>((a,b) -> b.getValue()-a.getValue());
+
+
 
         boolean result = dfs(k+1, i+1, j, board, word) ||
                 dfs(k+1, i, j+1, board, word) ||
