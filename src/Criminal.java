@@ -323,6 +323,48 @@ public class Criminal {
         return false;
     }
 
+    public static int[] asteroidCollision(int[] asteroids) {
+        final Stack<Integer> stack = new Stack<>();
+
+        for (int i =0; i < asteroids.length; i++){
+            int currAsteroid = asteroids[i];
+
+            if (stack.isEmpty()){
+                stack.add(currAsteroid);
+            }else {
+                int last = stack.peek();
+
+                if ( (abs(currAsteroid) - abs(last) == 0) || (abs(currAsteroid) > abs(last) && diffSign(currAsteroid, last))){
+                    stack.pop();
+                }
+
+                if ( !diffSign(last, currAsteroid)  && abs(currAsteroid) > abs(last)   ) {
+                    stack.add(currAsteroid);
+                }
+            }
+        }
+
+        int[] result = new int[stack.size()];
+
+        for (int i=result.length-1; i >= 0; i--){
+            result[i] = stack.pop();
+        }
+
+        return result;
+    }
+
+    public static int abs(int a){
+        if (a < 0){
+            return a*-1;
+        }
+
+        return a;
+    }
+
+    public static boolean diffSign(int a, int b){
+        return (a > 0 && b < 0) || ( a < 0 && b> 0);
+    }
+
     public static int findMaximumDistinctElements(int[] nums, int k) {
         int distinctElementsCount = 0;
         final PriorityQueue<Map.Entry<Integer, Integer>> maxHeap =
